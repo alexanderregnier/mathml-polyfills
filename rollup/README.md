@@ -46,11 +46,11 @@ In a script of type module (supported in all current browsers) you can use MathM
 
 Add the `mathml-polyfills` package to your dependencies: From your project,  run: 
 
-`npm install --save mathml-polyfills`.
+`npm install --save @w3c-math/mathml-polyfills`.
 
 You can now refer to the MathML polyfills with the following import:
 
-`import {_MathTransforms} from "mathml-polyfills"`
+`import {_MathTransforms} from "@w3c-math/mathml-polyfills"`
 
 Once one of the import methods has been used you can use the `_MathTransforms` object:
 
