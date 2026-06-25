@@ -1,5 +1,5 @@
 /* See the file ../LICENSE.txt for the LICENSE of this file. */
-export {_MathTransforms} from './common/math-transforms.js'
+import {_MathTransforms} from './common/math-transforms.js'
 import './mglyph/mglyph.js'
 import './mfenced/mfenced.js'
 import './semantics/semantics.js'
@@ -19,12 +19,20 @@ import './elem-math/elemMath.js'
 import './linebreaking/linebreaking.js'
 import './href/href.js'
 
-window.addEventListener('DOMContentLoaded', function() {
+const mathmlPolyfillsLoad = function() {
   const runTransformsOnPageLoad =
     typeof (window.doNotRunTransformsOnPageLoad) === "undefined" ? true : window.doNotRunTransformsOnPageLoad;
   if (runTransformsOnPageLoad) {
+    console.log("Running MathML polyfills.")
     for (let m of document.querySelectorAll("math")) {
       _MathTransforms.transform(m);
     }
   }
-})
+}
+if (document.readyState === "loading") {
+  window.addEventListener('DOMContentLoaded', mathmlPolyfillsLoad)
+} else {
+  mathmlPolyfillsLoad()
+}
+
+export default _MathTransforms;

@@ -2,33 +2,34 @@
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
 
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 const MATHML_NS = "http://www.w3.org/1998/Math/MathML";
 
 /*
     A really basic implementation, this will be a module.
  */
-  const _MathTransforms$1 = {
+  const _MathTransforms = {
     _plugins: new Map(),
     _css: '',
     _createStyleSheet: str => {
-      if (str.length !== _MathTransforms$1.cssKey) {    // always true the first time because _MathTransforms.cssKey is undefined
-        _MathTransforms$1.cssKey = str.length;
+      if (str.length !== _MathTransforms.cssKey) {    // always true the first time because _MathTransforms.cssKey is undefined
+        _MathTransforms.cssKey = str.length;
         const style = document.createElement ( 'style' );
         style.textContent = str;
         document.head.appendChild ( style );
-        _MathTransforms$1.styleSheet = style;      // cached stylesheet
+        _MathTransforms.styleSheet = style;      // cached stylesheet
         document.head.removeChild ( style );
       }
-      return _MathTransforms$1.styleSheet
+      return _MathTransforms.styleSheet
     },
 
-    getCSSStyleSheet: () => {const foo = _MathTransforms$1._createStyleSheet(_MathTransforms$1._css).cloneNode(true); 
+    getCSSStyleSheet: () => {const foo = _MathTransforms._createStyleSheet(_MathTransforms._css).cloneNode(true); 
     return foo; },
 
     transform: root => {
-      for (const selector of _MathTransforms$1._plugins.keys()) {
-        let transformer = _MathTransforms$1._plugins.get(selector);
+      for (const selector of _MathTransforms._plugins.keys()) {
+        let transformer = _MathTransforms._plugins.get(selector);
 
         // find the matching elements..
         // this is problematic since you could add some
@@ -46,8 +47,8 @@ const MATHML_NS = "http://www.w3.org/1998/Math/MathML";
     },
   
     add: (selector, cb, css='') => {
-      _MathTransforms$1._plugins.set(selector, cb);
-      _MathTransforms$1._css += css;
+      _MathTransforms._plugins.set(selector, cb);
+      _MathTransforms._css += css;
     }
   };
 
@@ -69,7 +70,7 @@ function cloneElementWithShadowRoot(el, clone) {
   // however, we still need to search 'el' to check for a shadowRoot.
   if (el.shadowRoot) {
       let shadowRoot = clone.attachShadow({ mode: "open" });
-      shadowRoot.appendChild(_MathTransforms$1.getCSSStyleSheet());
+      shadowRoot.appendChild(_MathTransforms.getCSSStyleSheet());
       for (let i = 0; i < el.shadowRoot.childElementCount; i++) {
         shadowRoot.appendChild( cloneElementWithShadowRoot(el.shadowRoot.children[i]) );
       }
@@ -222,27 +223,7 @@ function convertToPx(element, length) {
 // @ts-check
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Copyright (c) 2020 Neil Soiffer, Talking Cat Software
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 
@@ -271,34 +252,14 @@ const transformMglyph = (el) => {
     return img;
 };
 
-_MathTransforms$1.add('mglyph', transformMglyph);
+_MathTransforms.add('mglyph', transformMglyph);
 
 /***
  * Converts mfenced to the equivalent mrows.
  ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Copyright (c) 2016-2019 Igalia S.L.
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 const namespaceURI = "http://www.w3.org/1998/Math/MathML";
@@ -382,7 +343,7 @@ const expandFencedElement = (mfenced) => {
     return outerMrow;
 };
 
-_MathTransforms$1.add('mfenced', expandFencedElement);
+_MathTransforms.add('mfenced', expandFencedElement);
 
 /***
  * Ensures the first child of <semantics> is the presentation MathML fragment.
@@ -391,25 +352,7 @@ _MathTransforms$1.add('mfenced', expandFencedElement);
  ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /**
@@ -493,32 +436,13 @@ const transformSemantics = (semantics) => {
     return semantics;
 };
 
-_MathTransforms$1.add('math semantics', transformSemantics);
+_MathTransforms.add('math semantics', transformSemantics);
 
 /***
  * Handles the "bevelled" attribute on mfrac
  ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
 
 
 /**
@@ -608,7 +532,7 @@ const transformBevelled = (mfrac) => {
     return outerMpadded;
 };
 
-_MathTransforms$1.add('mfrac[bevelled]', transformBevelled);
+_MathTransforms.add('mfrac[bevelled]', transformBevelled);
 
 /***
  * Handles the "accent" attribute on an mo when it inside of
@@ -709,9 +633,9 @@ const transformAccents = (el) => {
   }
 };
 
-_MathTransforms$1.add('munder', transformAccents);
-_MathTransforms$1.add('mover', transformAccents);
-_MathTransforms$1.add('munderover', transformAccents);
+_MathTransforms.add('munder', transformAccents);
+_MathTransforms.add('mover', transformAccents);
+_MathTransforms.add('munderover', transformAccents);
 
 /***
  * Handles the "numalign" and "denomalign" attributes on mfrac
@@ -719,25 +643,7 @@ _MathTransforms$1.add('munderover', transformAccents);
  ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /**
@@ -832,12 +738,12 @@ const transformMunderover = (el) => {
     return el;
 };
 
-_MathTransforms$1.add('mfrac[numalign]', transformNumerator);
-_MathTransforms$1.add('mfrac[denomalign]', transformDenominator);
+_MathTransforms.add('mfrac[numalign]', transformNumerator);
+_MathTransforms.add('mfrac[denomalign]', transformDenominator);
 
-_MathTransforms$1.add('munder[align]', transformMunderAndMover);
-_MathTransforms$1.add('mover[align]', transformMunderAndMover);
-_MathTransforms$1.add('munderover[align]', transformMunderover);
+_MathTransforms.add('munder[align]', transformMunderAndMover);
+_MathTransforms.add('mover[align]', transformMunderAndMover);
+_MathTransforms.add('munderover[align]', transformMunderover);
 
 /***
  * Polyfills subscriptshift / superscriptshift on msub, msup, msubsup (MathML Full).
@@ -847,25 +753,7 @@ _MathTransforms$1.add('munderover[align]', transformMunderover);
  ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /**
@@ -943,35 +831,17 @@ const transformMsubsup = (el) => {
     return el;
 };
 
-_MathTransforms$1.add('msub[subscriptshift]', transformMsub);
-_MathTransforms$1.add('msup[superscriptshift]', transformMsup);
-_MathTransforms$1.add('msubsup[subscriptshift]', transformMsubsup);
-_MathTransforms$1.add('msubsup[superscriptshift]', transformMsubsup);
+_MathTransforms.add('msub[subscriptshift]', transformMsub);
+_MathTransforms.add('msup[superscriptshift]', transformMsup);
+_MathTransforms.add('msubsup[subscriptshift]', transformMsubsup);
+_MathTransforms.add('msubsup[superscriptshift]', transformMsubsup);
 
 /***
  * Handles mathsize values "small", "normal", and "big"
 ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 /**
  * @param {HTMLElement} el 
@@ -1000,9 +870,9 @@ const transformBig = (el) => {
     return el;
 };
 
-_MathTransforms$1.add('[mathsize="small"]', transformSmall);
-_MathTransforms$1.add('[mathsize="normal"]', transformNormal);
-_MathTransforms$1.add('[mathsize="big"]', transformBig);
+_MathTransforms.add('[mathsize="small"]', transformSmall);
+_MathTransforms.add('[mathsize="normal"]', transformNormal);
+_MathTransforms.add('[mathsize="big"]', transformBig);
 
 /***
  * Changes namedspaces on lspace and rspace to recommended values.
@@ -1010,25 +880,7 @@ _MathTransforms$1.add('[mathsize="big"]', transformBig);
  ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 /**
  * @param {HTMLElement} el 
@@ -1067,8 +919,8 @@ const transformNamedspace = (el) => {
 
 
 // can't use comma to join selectors here it seems
-_MathTransforms$1.add('math *[rspace*="mathspace"]', transformNamedspace);
-_MathTransforms$1.add('math *[lspace*="mathspace"]', transformNamedspace);
+_MathTransforms.add('math *[rspace*="mathspace"]', transformNamedspace);
+_MathTransforms.add('math *[lspace*="mathspace"]', transformNamedspace);
 
 /***
  * Handles all of the notation values on menclose mentioned in the spec.
@@ -1077,27 +929,7 @@ _MathTransforms$1.add('math *[lspace*="mathspace"]', transformNamedspace);
  ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Copyright (c) 2020 Neil Soiffer, Talking Cat Software
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 
@@ -1727,29 +1559,11 @@ const transformMEnclose = (el) => {
   return mencloseMRow;
 };
 
-_MathTransforms$1.add('menclose', transformMEnclose, MENCLOSE_CSS);
+_MathTransforms.add('menclose', transformMEnclose, MENCLOSE_CSS);
 
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /**
@@ -1779,9 +1593,9 @@ const transformThick = (el) => {
     return el;
 };
 
-_MathTransforms$1.add('[linethickness="thin"]', transformThin);
-_MathTransforms$1.add('[linethickness="medium"]', transformMedium);
-_MathTransforms$1.add('[linethickness="thick"]', transformThick);
+_MathTransforms.add('[linethickness="thin"]', transformThin);
+_MathTransforms.add('[linethickness="medium"]', transformMedium);
+_MathTransforms.add('[linethickness="thick"]', transformThick);
 
 /***
  * Handles lquote and rquote attrs on ms by replacing with mtext (MathML Core).
@@ -1789,25 +1603,7 @@ _MathTransforms$1.add('[linethickness="thick"]', transformThick);
 // @ts-check
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /**
@@ -1844,7 +1640,7 @@ const transformMs = (ms) => {
     return mtext;
 };
 
-_MathTransforms$1.add('ms', transformMs);
+_MathTransforms.add('ms', transformMs);
 
 /***
  * Converts an element with a mathvariant attribute other than 'normal' into
@@ -2042,7 +1838,7 @@ function getMathAlphanumeric(ch, mathStyle) {
     return String.fromCodePoint(32 * n + code + 0x1EE00)
 }
 
-_MathTransforms$1.add('*[mathvariant]', convertMathvariant);
+_MathTransforms.add('*[mathvariant]', convertMathvariant);
 
 /***
  * Handles width/height/depth attributes with % values for mpadded
@@ -2050,27 +1846,7 @@ _MathTransforms$1.add('*[mathvariant]', convertMathvariant);
 // @ts-check
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Copyright (c) 2020 Neil Soiffer, Talking Cat Software
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /**
@@ -2132,29 +1908,11 @@ const transformMpadded = (el) => {
     return el;
 };
 
-_MathTransforms$1.add('mpadded', transformMpadded);
+_MathTransforms.add('mpadded', transformMpadded);
 
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80 */
-/*
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /** @type {boolean | null} */
@@ -4237,32 +3995,12 @@ function transformMtable(mtable) {
   return c;
 }
 
-_MathTransforms$1.add('mtable', transformMtable);
+_MathTransforms.add('mtable', transformMtable);
 
 // @ts-check
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Copyright (c) 2020 Neil Soiffer, Talking Cat Software
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 /** Uppercase `tagName` for the `m-elem-math` custom element. */
@@ -5495,7 +5233,7 @@ let transformElemMath = (el) => {
 
     const spanShadowHost = document.createElement('span');
     const shadowRoot = spanShadowHost.attachShadow({ mode: 'open' });
-    shadowRoot.appendChild(_MathTransforms$1.getCSSStyleSheet());
+    shadowRoot.appendChild(_MathTransforms.getCSSStyleSheet());
 
     const elParent = el.parentElement;
     const nextSibling = el.nextElementSibling;
@@ -5512,9 +5250,9 @@ let transformElemMath = (el) => {
     return null;
 };
 
-_MathTransforms$1.add('mstack', transformElemMath, ELEM_MATH_CSS);
+_MathTransforms.add('mstack', transformElemMath, ELEM_MATH_CSS);
 /** `mlongdiv` reuses the same transform; styles are registered once on `mstack`. */
-_MathTransforms$1.add('mlongdiv', transformElemMath);
+_MathTransforms.add('mlongdiv', transformElemMath);
 
 /**
  * Declarative hook: first child must be `mstack` or `mlongdiv`; layout is moved into this element's shadow root.
@@ -5524,7 +5262,7 @@ customElements.define('m-elem-math', class extends HTMLElement {
         super();
         const gridRoot = new ElemMath(this.children[0]).expandMStackElement(this.children[0]);
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(_MathTransforms$1.getCSSStyleSheet());
+        shadowRoot.appendChild(_MathTransforms.getCSSStyleSheet());
         shadowRoot.appendChild(gridRoot);
     }
 });
@@ -5537,28 +5275,7 @@ customElements.define('m-elem-math', class extends HTMLElement {
 // @ts-check
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-
-  Copyright (c) 2020 Neil Soiffer, Talking Cat Software
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 const MTABLE_HAS_LINEBREAKS = 'data-has-linebreaks';
 
@@ -6740,7 +6457,7 @@ function addCustomElement(math) {
     }
 }
 
-_MathTransforms$1.add('math', addCustomElement);
+_MathTransforms.add('math', addCustomElement);
 
 // @ts-ignore
 const resizeObserver = new ResizeObserver(entries => {
@@ -6776,7 +6493,7 @@ customElements.define(SHADOW_ELEMENT_NAME, class extends HTMLElement {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(_MathTransforms$1.getCSSStyleSheet());
+        shadowRoot.appendChild(_MathTransforms.getCSSStyleSheet());
         const math = this.firstElementChild;
         //console.log(`in constructor...math width ${math ? math.getBoundingClientRect().width : 'set elsewhere'}`);
         if (math) {
@@ -6804,27 +6521,7 @@ customElements.define(SHADOW_ELEMENT_NAME, class extends HTMLElement {
 ***/
 /* -*- Mode: Java; tab-width: 4; indent-tabs-mode:nil; c-basic-offset: 4 -*- */
 /* vim: set ts=4 et sw=4 tw=80: */
-/*
-  Copyright (c) 2025 David Carlisle
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
 
 
 
@@ -6853,16 +6550,24 @@ const transformHref = (el) => {
 };
 
 
- _MathTransforms$1.add('math *[href]', transformHref);
+ _MathTransforms.add('math *[href]', transformHref);
 
-window.addEventListener('DOMContentLoaded', function() {
+/* See the file ../LICENSE.txt for the LICENSE of this file. */
+
+const mathmlPolyfillsLoad = function() {
   const runTransformsOnPageLoad =
     typeof (window.doNotRunTransformsOnPageLoad) === "undefined" ? true : window.doNotRunTransformsOnPageLoad;
   if (runTransformsOnPageLoad) {
+    console.log("Running MathML polyfills.");
     for (let m of document.querySelectorAll("math")) {
       _MathTransforms.transform(m);
     }
   }
-});
+};
+if (document.readyState === "loading") {
+  window.addEventListener('DOMContentLoaded', mathmlPolyfillsLoad);
+} else {
+  mathmlPolyfillsLoad();
+}
 
-export { _MathTransforms$1 as _MathTransforms };
+export { _MathTransforms as default };

@@ -24,6 +24,10 @@ in this directory.
 
 The packaging in all forms is tested in the folder [`test-rollup-wraps`](test-rollup-wraps).
 
+You can test `test-es-import.html` and `test-script-embed.html` by serving from
+this directory (`rollup`).
+You can test a webpack-based import by running `npm run build` then serving the `dist` directory.
+
 ## Use as a script element
 
 You can copy the file `allpolyfillsbundle-script.js` to your `js` directory and 
@@ -40,17 +44,17 @@ But note that the gains in performance or security may not be as you expect (see
 ## Use an ES6 module
 
 In a script of type module (supported in all current browsers) you can use MathML polyfills with
-`import {_MathTransforms} from "./allpolyfillsbundle-module.js"`.
+`import _MathTransforms from "./allpolyfillsbundle-module.js"`.
 
 ## Use an NPM package
 
 Add the `mathml-polyfills` package to your dependencies: From your project,  run: 
 
-`npm install --save @w3c-math/mathml-polyfills`.
+`npm install --save mathml-polyfills`
 
 You can now refer to the MathML polyfills with the following import:
 
-`import {_MathTransforms} from "@w3c-math/mathml-polyfills"`
+`import _MathTransforms from "mathml-polyfills";`
 
 Once one of the import methods has been used you can use the `_MathTransforms` object:
 
